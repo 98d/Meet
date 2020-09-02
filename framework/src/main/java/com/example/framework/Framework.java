@@ -1,5 +1,10 @@
 package com.example.framework;
 
+import android.content.Context;
+
+import com.example.framework.utils.LogUtils;
+import com.example.framework.utils.SpUtils;
+
 /**
  *
  * Framework 入口
@@ -21,5 +26,15 @@ public class Framework {
             }
         }
         return mFramework;
+    }
+
+    /**
+     * 初始化框架 Model
+     *
+     * @param mContext
+     */
+    public void initFramework(Context mContext) {
+        LogUtils.i("initFramework");
+        SpUtils.getInstance().initSp(mContext);
     }
 }

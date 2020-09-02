@@ -8,7 +8,6 @@ import androidx.annotation.RequiresApi;
 
 import com.example.framework.base.BaseUIActivity;
 import com.example.framework.manager.MediaPlayerManager;
-import com.example.framework.utils.LogUtils;
 
 
 public class MainActivity extends BaseUIActivity {

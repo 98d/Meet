@@ -1,4 +1,4 @@
-package com.example.framework.ui;
+package com.example.meet.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,5 +6,5 @@ import androidx.appcompat.app.AppCompatActivity;
  * 引导页
  */
 public class GuideActivity extends AppCompatActivity {
-    
+
 }
