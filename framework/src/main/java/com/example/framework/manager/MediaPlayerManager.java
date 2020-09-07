@@ -25,7 +25,7 @@ public class MediaPlayerManager {
     //停止
     public static final int MEDIA_STATUS_STOP = 2;
 
-    public static int MEDIA_STATUS = 2;
+    public int MEDIA_STATUS = 2;
 
     private MediaPlayer mMediaplayer;
 
@@ -71,11 +71,10 @@ public class MediaPlayerManager {
      * 开始播放
      * @param path
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void startPlay(AssetFileDescriptor path){
         try {
             mMediaplayer.reset();
-            mMediaplayer.setDataSource(path);
+            mMediaplayer.setDataSource(path.getFileDescriptor(),path.getStartOffset(),path.getLength());
             mMediaplayer.prepare();
             mMediaplayer.start();
             MEDIA_STATUS = MEDIA_STATUS_PLAY;

@@ -35,7 +35,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation rootProject.ext.dependencies["appcompat"]
     //添加Framework依赖
     implementation project(path:':framework')
 }
