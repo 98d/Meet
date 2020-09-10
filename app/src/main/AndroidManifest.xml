@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.meet">
-    
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".base.BaseApp"
@@ -14,6 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <provider
+            android:name="cn.bmob.v3.util.BmobContentProvider"
+            android:authorities="com.example.meet.BmobContentProvider">
+        </provider>
+
         <!--OPPO-->
         <meta-data
             android:name="android.max_aspect"
@@ -23,6 +25,7 @@
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
+
 
         <!--引导页-->
         <activity android:name=".ui.IndexActivity"
@@ -35,10 +38,15 @@
         </activity>
 
         <!--引导-->
-        <activity android:name=".ui.GuideActivity"/>
+        <activity android:name=".ui.GuideActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppThemeFull"/>
 
         <!--登录-->
-        <activity android:name=".ui.LoginActivity"/>
+        <activity
+            android:name=".ui.LoginActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <!--主页-->
         <activity android:name=".MainActivity"/>

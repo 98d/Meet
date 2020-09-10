@@ -11,6 +11,8 @@ android {
         //禁用PNG压缩
         aaptOptions.cruncherEnabled = false
     }
+
+
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     buildToolsVersion rootProject.ext.android["buildToolsVersion"]
 
@@ -31,10 +33,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //添加Framework依赖
     implementation project(path:':framework')
+
 }
