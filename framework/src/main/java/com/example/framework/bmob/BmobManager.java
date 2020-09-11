@@ -41,6 +41,14 @@ public class BmobManager {
     }
 
     /**
+     * 是否登录
+     * @return
+     */
+    public boolean isLogin(){
+        return  BmobUser.isLogin();
+    }
+
+    /**
      * 发送短信验证码
      * @param phone 手机号码
      * @param listener 回调

@@ -18,7 +18,11 @@ import com.example.framework.base.BaseUIActivity;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.IMUser;
 import com.example.framework.entity.Constants;
+import com.example.framework.manager.DialogManager;
 import com.example.framework.utils.SpUtils;
+import com.example.framework.view.DialogView;
+import com.example.framework.view.LoadingView;
+import com.example.framework.view.TouchPictureV;
 import com.example.meet.MainActivity;
 import com.example.meet.R;
 
@@ -44,6 +48,11 @@ public class LoginActivity extends BaseUIActivity implements View.OnClickListene
     private Button btn_login;
     private TextView tv_test_login;
     private TextView tv_user_agreement;
+
+    private DialogView mCodeView;
+    private TouchPictureV mPictureV;
+
+    private LoadingView mLoadingView;
 
     private static final int H_TIME = 1001;
     private static int TIME = 60;
@@ -84,20 +93,37 @@ public class LoginActivity extends BaseUIActivity implements View.OnClickListene
         btn_send_code.setOnClickListener(this);
         btn_login.setOnClickListener(this);
 
+        initDialogView();
         String phone = SpUtils.getInstance().getString(Constants.SP_PHONE,"");
         if (!TextUtils.isEmpty(phone)){
             et_phone.setText(phone);
         }
     }
 
+    private void initDialogView(){
+
+        mLoadingView = new LoadingView(this);
+        mCodeView = DialogManager.getInstance().initView(this,R.layout.dialog_code_view);
+        mPictureV = mCodeView.findViewById(R.id.mPictureV);
+        mPictureV.setViewResultListener(new TouchPictureV.OnViewResultListener() {
+            @Override
+            public void onResult() {
+                sendSMS();
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_send_code:
-                sendSMS();
+                DialogManager.getInstance().show(mCodeView);
                 break;
             case R.id.btn_login:
                 login();
+                break;
+            case R.id.tv_test_login:
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 break;
         }
     }
@@ -115,11 +141,14 @@ public class LoginActivity extends BaseUIActivity implements View.OnClickListene
             return;
         }
 
+        //显示Loading
+        mLoadingView.show("正在登录...");
         BmobManager.getInstance().signOrLoginByMobilePhone(phone, code, new LogInListener<IMUser>() {
             @Override
             public void done(IMUser imUser, BmobException e) {
                 if (e == null){
                     //登陆成功
+                    mLoadingView.hide();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     //把手机号码保存下来
                     SpUtils.getInstance().putString(Constants.SP_PHONE,phone);
@@ -149,6 +178,7 @@ public class LoginActivity extends BaseUIActivity implements View.OnClickListene
                 if (e == null){
                     btn_send_code.setEnabled(false);
                     mHandler.sendEmptyMessage(H_TIME);
+                    DialogManager.getInstance().hide(mCodeView);
                     Toast.makeText(LoginActivity.this, "短信验证码发送成功", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(LoginActivity.this, "短信验证码发送失败", Toast.LENGTH_SHORT).show();

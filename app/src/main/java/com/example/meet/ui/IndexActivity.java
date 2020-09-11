@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.framework.bmob.BmobManager;
 import com.example.framework.entity.Constants;
 import com.example.framework.utils.SpUtils;
 import com.example.meet.MainActivity;
@@ -62,8 +63,14 @@ public class IndexActivity extends AppCompatActivity {
             //如果非第一次启动，判断是否曾经登陆过
             String token = SpUtils.getInstance().getString(Constants.SP_TOKEN,"");
             if (TextUtils.isEmpty(token)){
-                //跳转登录页
-                intent.setClass(this,LoginActivity.class);
+                //判断Bmob是否登录
+                if (BmobManager.getInstance().isLogin()){
+                    //跳转主页
+                    intent.setClass(this, MainActivity.class);
+                }else {
+                    //跳转登录页
+                    intent.setClass(this,LoginActivity.class);
+                }
             }else {
                 //跳转主页
                 intent.setClass(this, MainActivity.class);
@@ -72,4 +79,35 @@ public class IndexActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    /**
+     * 优化
+     * 冷启动经过步骤：
+     * 1.第一次安装，加载应用程序启动
+     * 2.启动后显示一个空白窗口
+     * 3.创建/启动应用进程
+     *
+     * App内部：
+     * 1.创建App对象/Application对象
+     * 2.启动主线程（Main/UI Thread）
+     * 3.创建应用入口/LAUNCHER
+     * 4.填充ViewGroup中的View
+     * 5.绘制View measure -> layout -> draw
+     *
+     * 优化手段：
+     * 1.视图优化
+     *      1.设置主题透明
+     *      2.设置启动图片
+     * 2.代码优化
+     *      1.优化Application
+     *      2.布局优化，不需要繁琐布局
+     *      3.阻塞UI线程的操作
+     *      4.加载Bitmap/大图
+     *      5.其他的占用主线程操作
+     *
+     * 检测App Activity的启动时间
+     * 1.Shell
+     *   ActivityManager -> adb shell an start -S -W com.example.meet/com.example.meet.ui.IndexActivity
+     * 2.Log
+     */
 }
